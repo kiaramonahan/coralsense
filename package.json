@@ -2,11 +2,14 @@
   "name": "coral_sense_app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://coralsense.github.io",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d out"
   },
   "dependencies": {
     "mapbox-gl": "^3.7.0",
@@ -19,6 +22,8 @@
     "eslint-config-next": "14.2.15",
     "nodemon": "^3.1.7",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "gh-pages": "^6.0.0"
   }
 }
+

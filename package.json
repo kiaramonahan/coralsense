@@ -2,7 +2,7 @@
   "name": "coral_sense_app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://coralsense.github.io",
+  "homepage": "https://kiaramonahan/coralsense.github.io",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -1,0 +1,107 @@
+/* Button styling */
+.toggleButton {
+    background-color: #715eb7;
+    color: white;
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 200px;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+  }
+  
+  /* Hover effect */
+  .toggleButton:hover {
+    background-color: #484682; /* New hover color */
+  }
+  
+  .toggleButton.active {
+    background-color: #1e2e4d; /* New active color */
+  }
+
+/* Toolbar  */
+.toolbar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 15px;
+  z-index: 1;
+}
+
+.logo-image img {
+  max-width: 150px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.toolbar-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.question-icon {
+  background-color: #715eb7; 
+  color: white; 
+  font-size: 20px; 
+  border: none; 
+  border-radius: 50%; 
+  width: 30px; 
+  height: 30px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0; 
+  transition: background-color 0.3s, transform 0.3s; 
+}
+
+.question-icon:hover {
+  background-color: #484682; 
+  transform: scale(1.1); 
+}
+
+.instructions-popup {
+  position: absolute;
+  top: 10px;
+  left: 240px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: 10px;
+  max-width: 300px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.instructions-popup h3 {
+  font-size: 18px;
+  color: #1e2e4d;
+  margin-bottom: 5px;
+}
+
+.instructions-popup p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.close-button {
+  background-color: #715eb7;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: #484682;
+}

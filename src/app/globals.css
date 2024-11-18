@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ /* Set the background color of the body */
+ body {
+    margin: 0;
+    background-color: #1e2e4d;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Header container for logo and navbar */
+.header {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #1e2e4d;
+    align-items: center; /* This ensures vertical alignment */
+    z-index: 10;
+}
+
+.header-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: ; /* Ensures the header stays on top of the image */
+  }
+
+/* Styling the logo image */
+.logo-image img {
+    max-width: 150px;
+    height: auto;
+    display: block;
+}
+
+/* Navbar container */
+.navbar {
+    display: flex;
+    gap: 20px;
+    align-items: center; /* Ensures vertical alignment for buttons */
+}
+
+/* Button styles */
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 20px 20px; /* Consistent padding */
+    font-size: 20px;
+    background-color: transparent;
+    transition: background-color 0.3s ease, border-radius 0.3s ease;
+    font-family: "Helvetica-light", sans-serif;
+}
+
+/* Hover effect for buttons */
+.navbar a:hover {
+    background-color: #715eb7;
+    border-radius: 40px;
+}
+
+/* Container for background reef image */
+.background-image {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    z-index: 1;
+    clip-path: inset(80px 0px 0px 0px);
+}
+
+/* Styling the background image */
+.background-image img {
+    max-width: 80%;
+    height: auto;
+    max-height: 80%;
+}
+
+
+.max-w-4xl {
+    max-width: 60rem; /* Adjusting the width of the content container */
+}
+
+/* Ensure text is properly visible */
+.text-white {
+    color: white;
+}
+
+.bg-opacity-80 {
+    background-color: rgba(30, 46, 77, 0.8); /* Slight background for the text container */
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+
+
+
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .max-w-4xl {
+        max-width: 90%; 
+    }
+}
+
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .background-image img {
+        max-width: 70%;
+    }
+}

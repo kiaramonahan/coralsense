@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Map with GeoJSON, Toggle Layer, and Legend</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
+    <style>
+		#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-color: #1e2e4d;
+            height: 100vh;
+        }
+
+        /* header */
+        .header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* This ensures vertical alignment */
+			z-index: 10; /* Ensure it appears above other elements */
+        }
+
+        /* logo image */
+        .logo-image img {
+            max-width: 150px;
+            height: auto;
+            display: block;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            gap: 20px;
+            align-items: center; /* Ensures vertical alignment for buttons */
+        }
+
+        /* navbar buttons (not needed for this page but kept anyways)*/
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 20px 20px;
+            font-size: 20px;
+            background-color: transparent;
+            transition: background-color 0.3s ease, border-radius 0.3s ease;
+            font-family: "Helvetica-light", sans-serif;
+            font-weight: normal;
+        }
+
+        /* buttons hover */
+        .navbar a:hover {
+            background-color: #715eb7;
+            border-radius: 40px;
+        }
+
+        /*  */
+        .navbar a.launch-tool {
+            font-weight: bold;
+            background-color: #715eb7; 
+            border-radius: 40px;
+        }
+
+        /* mapbox map */
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+		#layer-toggle {
+		    position: absolute;
+		    top: 10px;
+		    left: 10px;
+		    background-color: rgba(255, 255, 255, 0.7);
+		    padding-top: 75px; /* making space at top for logo */
+		    padding-right: 10px;
+		    padding-bottom: 10px;
+		    padding-left: 10px;
+		    border: 1px solid #ddd;
+		    border-radius: 15px;
+		    z-index: 1;
+		    font-family: 'Helvetica-light', sans-serif;
+		}
+
+		
+		.buttons-container {
+    		display: flex;
+    		flex-direction: column;
+    		align-items: center; /* Center buttons horizontally */
+    		margin-top: 10px; /* Space between logo and buttons */
+		}
+
+		/* button style */
+		.toggleButton {
+    		background-color: #715eb7;
+    		color: white;
+    		padding: 10px;
+    		margin: 5px 0;
+    		border: none;
+    		border-radius: 20px;
+    		cursor: pointer;
+    		font-size: 16px;
+    		display: block;
+    		width: 200px; 
+    		text-align: center; 
+		}
+        .toggleButton.active {
+            background-color: #1e2e4d;
+        }
+
+        .toggleButton:hover {
+            background-color: #484682;
+        }
+
+        /* legend */
+        #legend {
+            position: absolute;
+            bottom: 35px;
+            left: 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            font-family: 'Helvetica', sans-serif;
+            z-index: 1;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+			margin-top: 5px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+
+<!-- header -->
+<div class="header">
+	<div class="logo-image">
+	    <a href="home.html">
+		        <img src="logo_no_background.png" alt="Coral Sense">
+			</a>
+	    </div>
+
+    </div>
+
+<div id="map"></div>
+
+    <!-- adding buttons -->
+<div id="layer-toggle">
+	    
+	<div class="buttons-container">
+	        <button id="toggleReefLayerButton" class="toggleButton active">Show Reef Layer</button>
+	        <button id="toggleSecondLayerButton" class="toggleButton">Show Layer Two</button>
+	        <button id="toggleThirdLayerButton" class="toggleButton">Show Layer Three</button>
+	    </div>
+	</div>
+
+    <!-- legend -->
+    <div id="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #00ff00;"></div>
+            <span>Low Threat</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #ffa500;"></div>
+            <span>Medium Threat</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #ff0000;"></div>
+            <span>High Threat</span>
+        </div>
+    </div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoia2lraW1hcHMiLCJhIjoiY20wbGw1ZHRlMDYxczJzcHlmOG4ydGFvNSJ9.3NwtcJ6HLLFMaL-u_qEqyg';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/kikimaps/cm1vadaos007w01rdfsc80cdv', // my mapbox style
+            zoom: 2,
+            center: [200, 20],
+            projection: 'mercator', // flat map projection
+            interactive: true
+        });
+        map.scrollZoom.enable();
+        map.addControl(new mapboxgl.NavigationControl());
+
+	// adding layers
+	    map.on('load', function () {
+	        // data source for reef distributions
+	        map.addSource('reefs', {
+	            'type': 'geojson',
+	            'data': './reef_locations.geojson' 
+	        });
+	        map.addLayer({
+	            'id': 'reef-layer',
+	            'type': 'fill',
+	            'source': 'reefs',
+	            'layout': {},
+	            'paint': {
+	                'fill-color': '#00faff',
+	                'fill-opacity': 0.6
+	            }
+	        });
+
+	        // second data source
+	        map.addSource('overfishing', {
+	            'type': 'geojson',
+	            'data': './overfishing.geojson' 
+	        });
+	        map.addLayer({
+	            'id': 'second-layer',
+	            'type': 'fill',
+	            'source': 'overfishing',
+	            'layout': {},
+	            'paint': {
+	                'fill-color': [
+	                    'match',
+	                    ['get', 'THREAT_TXT'], 
+	                    'Low', '#00ff00', // Green Low threat
+	                    'Medium', '#ffa500', // Orange Medium threat
+	                    'High', '#ff0000', // Red High threat
+	                    /* default */ '#cccccc' // Gray default
+	                ],
+	            },
+	            'visibility': 'none' // hidden at start
+	        });
+
+	        // third data source
+	        map.addSource('marine_pollution', {
+	            'type': 'geojson',
+	            'data': './marine_pollution.geojson' 
+	        });
+	        map.addLayer({
+	            'id': 'third-layer',
+	            'type': 'fill',
+	            'source': 'marine_pollution',
+	            'layout': {},
+	            'paint': {
+	                'fill-color': [
+	                    'match',
+	                    ['get', 'THREAT_TXT'], // 
+	                    'Low', '#00ff00', // Green Low threat
+	                    'Medium', '#ffa500', // Orange Medium threat
+	                    'High', '#ff0000', // Red High threat
+	                    /* default */ '#cccccc' // Gray default
+	                ],
+	                'fill-opacity': 0.6
+	            },
+	            'visibility': 'none' // hidden at start
+	        });
+
+	        // buttons
+	        const buttons = {
+	            'reef-layer': document.getElementById('toggleReefLayerButton'),
+	            'second-layer': document.getElementById('toggleSecondLayerButton'),
+	            'third-layer': document.getElementById('toggleThirdLayerButton')
+	        };
+
+	        function showLayer(layerToShow) {
+	            // hiding layers to start
+	            map.setLayoutProperty('reef-layer', 'visibility', 'visible');
+	            map.setLayoutProperty('second-layer', 'visibility', 'none');
+	            map.setLayoutProperty('third-layer', 'visibility', 'none');
+
+	            // show selected layer
+	            map.setLayoutProperty(layerToShow, 'visibility', 'visible');
+
+	            // change button look depending on if it is clicked
+	            Object.keys(buttons).forEach(layer => {
+	                if (layer === layerToShow) {
+	                    buttons[layer].classList.add('active');
+	                } else {
+	                    buttons[layer].classList.remove('active');
+	                }
+	            });
+	        }
+
+	        // t start reef is shown
+	        showLayer('reef-layer');
+
+	        // more button stuff
+	        buttons['reef-layer'].addEventListener('click', () => showLayer('reef-layer'));
+	        buttons['second-layer'].addEventListener('click', () => showLayer('second-layer'));
+	        buttons['third-layer'].addEventListener('click', () => showLayer('third-layer'));
+	    });
+</script>
+</body>
+</html>
+
+
+

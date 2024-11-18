@@ -14,7 +14,7 @@ export default function Map() {
 
   useEffect(() => {
     if (mapRef.current) return;
-    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2lraW1hcHMiLCJhIjoiY20wbGw1ZHRlMDYxczJzcHlmOG4ydGFvNSJ9.3NwtcJ6HLLFMaL-u_qEqyg';
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/kikimaps/cm1vadaos007w01rdfsc80cdv",

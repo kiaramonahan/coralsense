@@ -9,7 +9,7 @@ export default function Map() {
   const mapContainerRef = useRef(null);
   const [activeLayer, setActiveLayer] = useState("reef-layer"); // default reef layer
   const mapRef = useRef(null);
-  const [year, setYear] = useState(2019);
+  const [year, setYear] = useState(2018);
   const [showInstructions, setShowInstructions] = useState(false);
 
   useEffect(() => {
@@ -179,8 +179,8 @@ export default function Map() {
               id="slider"
               className="row"
               type="range"
-              min="2017"
-              max="2022"
+              min="2016"
+              max="2020"
               step="1"
               value={year}
               onChange={handleYearChange}

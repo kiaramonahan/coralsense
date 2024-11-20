@@ -23,11 +23,11 @@ export default function AboutUs() {
           <div className="flex flex-wrap justify-start gap-8 mt-8">
             {/* Team Member 1 - Kiara Monahan */}
             <div className="text-left">
-              <img src="/path/to/kiara.jpg" alt="Kiara Monahan" className="w-32 h-32 rounded-full mb-4" />
+              <img src="kiara_monahan.png" alt="Kiara Monahan" className="w-32 h-32 rounded-full mb-4" />
               <h3 className="text-xl font-semibold">Kiara Monahan</h3>
               <p className="text-sm mb-2">UC Berkeley MIDS Student</p>
-              <a href="https://www.linkedin.com/in/kiara" target="_blank" rel="noopener noreferrer" className="text-blue-500">LinkedIn</a>
-              <p className="text-sm mt-2">[Brief bio for Kiara, highlighting background, skills, and interests related to CoralSense]</p>
+              <a href="https://www.linkedin.com/in/kiaramonahan/" target="_blank" rel="noopener noreferrer" className="text-blue-500">LinkedIn</a>
+              <p className="text-sm mt-2">Kiara is a data scientist with biomedical research experience passionate about using technology to address real-world challenges and create positive change. With a Master of Information and Data Science from UC Berkeley, she brings expertise in data analysis, machine learning, and visualization. A new member of the Golden Gate Bird Alliance's San Francisco Conservation Committee, Kiara is committed to contributing to conservation in her local community.</p>
             </div>
 
             {/* Team Member 2 - Nigel Lewis */}

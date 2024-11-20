@@ -12,8 +12,10 @@ export default function Header() {
       {/* Navbar */}
       <nav className="navbar flex space-x-6">
         <Link href="/start-here" className="text-white">Start Here</Link>
+        <Link href="/coral-health" className="text-white">Coral Health</Link>
         <Link href="/datasets" className="text-white">Datasets</Link>
         <Link href="/about-us" className="text-white">About Us</Link>
+        <Link href="/get-involved" className="text-white">Get Involved</Link>
         <Link href="/mapbox" className="text-white">Launch Tool</Link>
       </nav>
     </header>

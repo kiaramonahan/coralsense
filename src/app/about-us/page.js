@@ -41,10 +41,10 @@ export default function AboutUs() {
 
             {/* Team Member 3 - Ted Johnson */}
             <div className="text-left">
-              <img src="/path/to/ted.jpg" alt="Ted Johnson" className="w-32 h-32 rounded-full mb-4" />
+              <img src="/ted_johnson.png" alt="Ted Johnson" className="w-32 h-32 rounded-full mb-4" />
               <h3 className="text-xl font-semibold">Ted Johnson</h3>
               <p className="text-sm mb-2">UC Berkeley MIDS Student</p>
-              <a href="https://www.linkedin.com/in/ted" target="_blank" rel="noopener noreferrer" className="text-blue-500">LinkedIn</a>
+              <a href="https://www.linkedin.com/in/ted-johnson-712439186/" target="_blank" rel="noopener noreferrer" className="text-blue-500">LinkedIn</a>
               <p className="text-sm mt-2">[Brief bio for Ted, highlighting background, skills, and interests related to CoralSense]</p>
             </div>
 

@@ -22,9 +22,9 @@
 /* Header container for logo and navbar */
 .header {
     position: fixed;
-    top: 20px;
-    left: 20px;
-    right: 20px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
     display: flex;
     justify-content: space-between;
     background-color: #1e2e4d;
@@ -36,6 +36,7 @@
     position: relative;
     top: 0;
     left: 0;
+    margin-top: 10px;
     width: 100%;
     z-index: ; /* Ensures the header stays on top of the image */
   }
@@ -45,12 +46,15 @@
     max-width: 150px;
     height: auto;
     display: block;
+    align-items: center;
 }
 
 /* Navbar container */
 .navbar {
     display: flex;
-    gap: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    gap: 10px;
     align-items: center; /* Ensures vertical alignment for buttons */
 }
 
@@ -58,7 +62,7 @@
 .navbar a {
     color: white;
     text-decoration: none;
-    padding: 20px 20px; /* Consistent padding */
+    padding: 15px 15px; /* Consistent padding */
     font-size: 20px;
     background-color: transparent;
     transition: background-color 0.3s ease, border-radius 0.3s ease;

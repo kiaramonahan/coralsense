@@ -20,7 +20,7 @@ export default function Home() {
             Welcome to CoralSense
           </h1>
           <p style={{ fontSize: "1.2rem", lineHeight: "1.5" }}>
-          "Coral reefs are a jeweled belt around the middle of the planet." - Dr. Sylvia Earle, Oceanographer.
+          "Coral reefs are a jeweled belt around the middle of the planet." - Dr. Sylvia Earle, Oceanographer
           </p>
         </div>
 

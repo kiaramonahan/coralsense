@@ -150,3 +150,54 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(14px);
 }
+
+/* Year Slider Track */
+.year-slider {
+  -webkit-appearance: none; /* Remove default  */
+  appearance: none;
+  width: 90%; 
+  height: 12px; 
+  background: #C2C5C5; 
+  border-radius: 6px; 
+  outline: none; 
+  opacity: 0.9; 
+  transition: background 0.3s ease-in-out; 
+}
+
+.year-slider:hover {
+  background: #d6d6d6;
+}
+
+/* Year Slider Thumb */
+.year-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; 
+  appearance: none;
+  width: 20px; 
+  height: 20px; 
+  background: #715eb7; 
+  border-radius: 50%; 
+  cursor: pointer; 
+  transition: transform 0.2s ease-in-out; 
+}
+
+.year-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1); 
+}
+
+.year-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #715eb7;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.year-slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+}
+
+/* Track Focus Styling */
+.year-slider:focus {
+  box-shadow: 0 0 5px #715eb7;
+}

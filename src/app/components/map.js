@@ -279,19 +279,21 @@ export default function Map() {
         </div>
 
         {activeLayer === "predictions-layer" && (
-          <div className="session" id="sliderbar" style={{ marginTop: "15px" }}>
-            <h2>Year: <label id="active-year">{year}</label></h2>
-            <input
-              id="slider"
-              className="row"
-              type="range"
-              min="2016"
-              max="2020"
-              step="1"
-              value={year}
+         <div className="session" id="sliderbar" style={{ marginTop: "15px", textAlign: "center" }}>
+           <h2>
+             Year: <label id="active-year">{year}</label>
+           </h2>
+           <input
+             id="year-slider"
+             className="year-slider"
+             type="range"
+             min="2016"
+             max="2020"
+             step="1"
+             value={year}
               onChange={handleYearChange}
-            />
-          </div>
+           />
+         </div>
         )}
       </div>
 

@@ -50,6 +50,46 @@ export default function Map() {
         visibility: "visible", 
       });
 
+      map.addSource("latest_datapoints", {
+        type: "geojson",
+        data: "./latest_datapoints.geojson",
+      });
+      map.addLayer({
+        id: "latest-datapoints-layer",
+        type: "circle",
+        source: "latest_datapoints",
+        layout: {},
+        paint: {
+          "circle-color": [
+            "match",
+            ["get", "hard_coral_class"],
+              "Poor", "#ff0000",
+              "Fair", "#ffa500",
+              "Good", "#00ff00",
+              "#cccccc",
+          ],
+          "circle-opacity": 0.8,
+        },
+        visibility: "none", // hidden by default
+      });
+
+      map.on("mousemove", "latest-datapoints-layer", (e) => {
+        const { country_name, ecoregion, hard_coral_class, date_year } = e.features[0].properties;
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(
+            `<strong>Country/region:</strong> ${country_name}<br/>
+            <strong>Ecoregion:</strong> ${ecoregion}<br/>
+            <strong>Year:</strong> ${date_year}<br/>
+            <strong>Hard Coral Cover:</strong> ${hard_coral_class}`
+          )
+          .addTo(map);
+      });
+
+      map.on("mouseleave", "latest-datapoints-layer", () => {
+        popup.remove();
+      });
+
       map.addSource("dataset", {
         type: "geojson",
         data: "./cleaned_data.geojson",
@@ -68,7 +108,7 @@ export default function Map() {
               "Good", "#00ff00",
               "#cccccc",
           ],
-          "circle-opacity": 0.6,
+          "circle-opacity": 0.8,
         },
         filter: ["==", ["number", ["get", "date_year"]], year],
         visibility: "none", // hidden by default
@@ -115,6 +155,7 @@ export default function Map() {
   const showLayer = (layerToShow) => {
     if (mapRef.current) {
       mapRef.current.setLayoutProperty("reef-layer", "visibility", "none");
+      mapRef.current.setLayoutProperty("latest-datapoints-layer", "visibility", "none");
       mapRef.current.setLayoutProperty("predictions-layer", "visibility", "none");
       mapRef.current.setLayoutProperty(layerToShow, "visibility", "visible");
     }
@@ -167,6 +208,9 @@ export default function Map() {
           <button id="toggleReefLayerButton" onClick={() => showLayer("reef-layer")} className={`toggleButton ${activeLayer === "reef-layer" ? "active" : ""}`}>
             Reef Distributions
           </button>
+          <button id="toggleLatestDatapointsLayerButton" onClick={() => showLayer("latest-datapoints-layer")} className={`toggleButton ${activeLayer === "latest-datapoints-layer" ? "active" : ""}`}>
+            Last Known Reef Health
+          </button>
           <button id="togglePredictionsLayerButton" onClick={() => showLayer("predictions-layer")} className={`toggleButton ${activeLayer === "predictions-layer" ? "active" : ""}`}>
             Reef Health Predictions
           </button>
@@ -192,7 +236,7 @@ export default function Map() {
       {showInstructions && (
         <div className="instructions-popup">
           <h3>Map Tips</h3>
-          <p>Use the toolbar to switch between <b>Reef Distributions</b> and <b>Reef Health Predictions</b>. Adjust the year using the slider to view predictions for different years. Hover over points for detailed information. Scroll to zoom in or out, and be sure to drag the map around to explore. A legend is available in the bottom left corner of the map. <br></br><br></br><b>Reef Distributions</b> shows where reefs are around the globe.<br></br><b>Reef Health Predictions</b> are predictions of hard coral cover from our models. You can read more about our prediction process on our main site.</p>
+          <p>Use the toolbar to switch between <b>Reef Distributions</b>, <b>Last Known Reef Health</b>, and <b>Reef Health Predictions</b>. Adjust the year using the slider to view predictions for different years. Hover over points for detailed information. Scroll to zoom in or out, and be sure to drag the map around to explore. A legend is available in the bottom left corner of the map. <br></br><br></br><b>Reef Distributions</b> shows where reefs are around the globe.<br></br><b>Last Known Reef Health</b> shows the most current reef health, based on hard coral cover, for each location. <br></br><b>Reef Health Predictions</b> are predictions of hard coral cover from our models. You can read more about our prediction process on our main site.</p>
           <button onClick={() => setShowInstructions(false)} className="close-button">Close</button>
         </div>
       )}
@@ -225,6 +269,19 @@ export default function Map() {
           </div>
         ) : (
           <>
+            <div className="legend-item" style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
+              <div
+                className="legend-color"
+                style={{
+                  width: "20px",
+                 height: "20px",
+                 backgroundColor: "#00faff",
+                 marginRight: "10px",
+                 borderRadius: "3px",
+                }}
+              ></div>
+              <span>Reef</span>
+              </div>
             <div className="legend-item" style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
               <div
                 className="legend-color"

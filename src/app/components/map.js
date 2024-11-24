@@ -11,6 +11,7 @@ export default function Map() {
   const mapRef = useRef(null);
   const [year, setYear] = useState(2018);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [colorblindMode, setColorblindMode] = useState(false);
 
   useEffect(() => {
     if (mapRef.current) return;
@@ -138,6 +139,47 @@ export default function Map() {
     return () => map.remove();
   }, []);
 
+  // Update map layers dynamically when colorblind mode toggles
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const colorBlindColors = colorblindMode
+      ? {
+          Poor: "#FFD700",
+          Fair: "#00D900",
+          Good: "#FF00AA",
+        }
+      : {
+          Poor: "#ff0000",
+          Fair: "#ffa500",
+          Good: "#00ff00",
+        };
+
+    // Update colors for latest-datapoints-layer
+    if (mapRef.current.getLayer("latest-datapoints-layer")) {
+      mapRef.current.setPaintProperty("latest-datapoints-layer", "circle-color", [
+        "match",
+        ["get", "hard_coral_class"],
+        "Poor", colorBlindColors.Poor,
+        "Fair", colorBlindColors.Fair,
+        "Good", colorBlindColors.Good,
+        "#cccccc",
+      ]);
+    }
+
+    // Update colors for predictions-layer
+    if (mapRef.current.getLayer("predictions-layer")) {
+      mapRef.current.setPaintProperty("predictions-layer", "circle-color", [
+        "match",
+        ["get", "hard_coral_class"],
+        "Poor", colorBlindColors.Poor,
+        "Fair", colorBlindColors.Fair,
+        "Good", colorBlindColors.Good,
+        "#cccccc",
+      ]);
+    }
+  }, [colorblindMode]);
+
   useEffect(() => {
     if (mapRef.current && mapRef.current.getLayer("predictions-layer") && activeLayer === "predictions-layer") {
       mapRef.current.setFilter("predictions-layer", [
@@ -164,6 +206,10 @@ export default function Map() {
     }
   };
 
+  const toggleColorblindMode = () => {
+    setColorblindMode(!colorblindMode);
+  };
+
   return (
     <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
       <div
@@ -171,7 +217,7 @@ export default function Map() {
           position: "absolute",
           top: "10px",
           left: "10px",
-          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
           padding: "10px",
           borderRadius: "15px",
           zIndex: 1,
@@ -203,6 +249,22 @@ export default function Map() {
             ?
           </button>
         </div>
+
+        {/* Colorblind Mode Toggle */}
+          <div
+            style={{
+             display: "flex",
+             alignItems: "center",
+             justifyContent: "center", // Center horizontally
+             marginTop: "10px",
+            }}
+          >
+            <label style={{ marginRight: "10px" }}>Colorblind Mode</label>
+            <label className="switch">
+             <input type="checkbox" checked={colorblindMode} onChange={toggleColorblindMode} />
+             <span className="slider round"></span>
+            </label>
+          </div>
 
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "10px" }}>
           <button id="toggleReefLayerButton" onClick={() => showLayer("reef-layer")} className={`toggleButton ${activeLayer === "reef-layer" ? "active" : ""}`}>
@@ -247,7 +309,7 @@ export default function Map() {
           position: "absolute",
           bottom: "30px",
           left: "10px",
-          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
           padding: "10px",
           borderRadius: "15px",
           zIndex: 1,
@@ -288,12 +350,12 @@ export default function Map() {
                 style={{
                   width: "20px",
                   height: "20px",
-                  backgroundColor: "#00ff00",
+                  backgroundColor: colorblindMode ? "#FFD700" : "#00ff00",
                   marginRight: "10px",
                   borderRadius: "3px",
                 }}
               ></div>
-              <span>Good</span>
+              <span>Good Coral Cover</span>
             </div>
             <div className="legend-item" style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
               <div
@@ -301,12 +363,12 @@ export default function Map() {
                 style={{
                   width: "20px",
                   height: "20px",
-                  backgroundColor: "#ffa500",
+                  backgroundColor: colorblindMode ? "#00D900" : "#ffa500",
                   marginRight: "10px",
                   borderRadius: "3px",
                 }}
               ></div>
-              <span>Fair</span>
+              <span>Fair Coral Cover</span>
             </div>
             <div className="legend-item" style={{ display: "flex", alignItems: "center" }}>
               <div
@@ -314,12 +376,12 @@ export default function Map() {
                 style={{
                   width: "20px",
                   height: "20px",
-                  backgroundColor: "#ff0000",
+                  backgroundColor: colorblindMode ? "#FF00AA" : "#ff0000",
                   marginRight: "10px",
                   borderRadius: "3px",
                 }}
               ></div>
-              <span>Poor</span>
+              <span>Poor Coral Cover</span>
             </div>
           </>
         )}
@@ -329,5 +391,3 @@ export default function Map() {
     </div>
   );
 }
-
-

@@ -45,7 +45,7 @@ export default function AboutUs() {
               <h3 className="text-xl font-semibold">Ted Johnson</h3>
               <p className="text-sm mb-2">UC Berkeley MIDS Student</p>
               <a href="https://www.linkedin.com/in/ted-johnson-712439186/" target="_blank" rel="noopener noreferrer" className="text-blue-500">LinkedIn</a>
-              <p className="text-sm mt-2">[Brief bio for Ted, highlighting background, skills, and interests related to CoralSense]</p>
+              <p className="text-sm mt-2">Ted Johnson is a technology professional with a foundation in digital advertising and engineering. Formerly a Senior AdTech Engineer at a leading digital advertising agency, Ted spent five years driving innovative solutions in the fast-paced ad technology space. He holds a bachelor’s degree in Computer Science and is currently completing his Master of Information and Data Science at the University of California, Berkeley. With expertise in engineering, data science, and analytics, Ted is passionate about leveraging technology to solve complex challenges and create meaningful impact.</p>
             </div>
 
             {/* Team Member 4 - Theresa Sumarta */}

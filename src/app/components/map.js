@@ -9,6 +9,7 @@ export default function Map() {
   const mapContainerRef = useRef(null);
   const [activeLayer, setActiveLayer] = useState("reef-layer"); // default reef layer
   const mapRef = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [year, setYear] = useState(2018);
   const [showInstructions, setShowInstructions] = useState(false);
   const [colorblindMode, setColorblindMode] = useState(false);
@@ -39,55 +40,61 @@ export default function Map() {
     setPrediction(null);
   };
 
-  const handleSubmit = () => {
-    const apiUrl = "https://model-serving-1091990692437.us-central1.run.app/predict";
-  
-    // Ensure the features are sent in the correct order
-    const featureOrder = [
-      "depth_m",
-      "distance_to_shore",
-      "turbidity",
-      "cyclone_frequency",
-      "climsst",
-      "temperature_kelvin",
-      "windspeed",
-      "ssta_minimum",
-      "ssta_maximum",
-      "nutrient_indicator_algae",
-    ];
-  
-    const requestBody = {
-      features: [
-        featureOrder.map((key) => featureValues[key]), // Create array based on the correct order
+  const apiUrl = "https://cors-anywhere.herokuapp.com/https://model-serving-1091990692437.us-central1.run.app/predict";
+
+
+const handleSubmit = () => {
+
+  // format payload
+  const requestBody = {
+    features: [
+      [
+        featureValues.depth_m,
+        featureValues.distance_to_shore,
+        featureValues.turbidity,
+        featureValues.cyclone_frequency,
+        featureValues.climsst,
+        featureValues.temperature_kelvin,
+        featureValues.windspeed,
+        featureValues.ssta_minimum,
+        featureValues.ssta_maximum,
+        featureValues.nutrient_indicator_algae,
       ],
-    };
-  
-    console.log("Requesting prediction with payload:", requestBody);
-  
-    // Make the API call
-    fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    })
-      .then((response) => {
-        console.log("API Response Status:", response.status);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("API Response Data:", data);
-        setPrediction(data.predictions[0]); // Update prediction with the first value
-      })
-      .catch((error) => {
-        console.error("Error during API call:", error);
-        setPrediction("Error fetching prediction");
-      });
+    ],
   };
+  setPrediction(null); 
+  console.log("Requesting prediction with payload:", requestBody);
+  setLoading(true); 
+  fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  })
+    .then((response) => {
+      console.log("API Response Status:", response.status); 
+      if (!response.ok) {
+        return response.text().then((text) => {
+          console.error("API Error Response:", text); 
+          throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("API Response:", data);
+      setPrediction(data.predictions[0]); //  prediction state
+      setLoading(false); // hide loading animation
+    })
+    .catch((error) => {
+      console.error("Error during API call:", error);
+      setPrediction("Error fetching prediction."); // handle error 
+      setLoading(false); // hide loading animation
+    });
+  
+};
+
   
   
   
@@ -204,8 +211,8 @@ export default function Map() {
           nutrient_indicator_algae,
         });
         setCoordinates({
-          lat: latitude_degrees, // Use latitude_degrees
-          lng: longitude_degrees, // Use longitude_degrees
+          lat: latitude_degrees, 
+          lng: longitude_degrees, 
         });
         setCountryName(country_name);
         setEcoregion(ecoregion);
@@ -260,7 +267,6 @@ export default function Map() {
     return () => map.remove();
   }, []);
 
-  // Update map layers dynamically when colorblind mode toggles
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -288,7 +294,6 @@ export default function Map() {
       ]);
     }
 
-    // Update colors for predictions-layer
     if (mapRef.current.getLayer("predictions-layer")) {
       mapRef.current.setPaintProperty("predictions-layer", "circle-color", [
         "match",
@@ -376,7 +381,7 @@ export default function Map() {
             style={{
              display: "flex",
              alignItems: "center",
-             justifyContent: "center", // Center horizontally
+             justifyContent: "center", 
              marginTop: "10px",
             }}
           >
@@ -475,7 +480,7 @@ export default function Map() {
                 style={{
                   width: "20px",
                   height: "20px",
-                  backgroundColor: colorblindMode ? "#FFD700" : "#00ff00",
+                  backgroundColor: colorblindMode ? "#FF00AA" : "#00ff00",
                   marginRight: "10px",
                   borderRadius: "3px",
                 }}
@@ -501,7 +506,7 @@ export default function Map() {
                 style={{
                   width: "20px",
                   height: "20px",
-                  backgroundColor: colorblindMode ? "#FF00AA" : "#ff0000",
+                  backgroundColor: colorblindMode ? "#FFD700" : "#ff0000",
                   marginRight: "10px",
                   borderRadius: "3px",
                 }}
@@ -514,45 +519,170 @@ export default function Map() {
 
       {modalVisible && (
   <div className="modal">
-    <h2>Reef Details</h2>
+    {/* Close Button (X) */}
+    <button
+      onClick={handleModalClose}
+      style={{
+        position: "absolute",
+        top: "0px",
+        right: "5px",
+        backgroundColor: "transparent",
+        border: "none",
+        fontSize: "18px",
+        fontWeight: "bold",
+        cursor: "pointer",
+        color: "#715eb7",
+      }}
+    >
+      &times;
+    </button>
     <div style={{ marginBottom: "15px" }}>
       <p><strong>Coordinates:</strong> {coordinates.lat.toFixed(2)}, {coordinates.lng.toFixed(2)}</p>
       <p><strong>Country:</strong> {countryName}</p>
       <p><strong>Ecoregion:</strong> {ecoregion}</p>
     </div>
-    <h3>Adjust Features</h3>
-    {Object.keys(featureValues).map((feature) => (
-  <div key={feature} style={{ marginBottom: "15px" }}>
-    <label htmlFor={feature}>{feature.replace("_", " ")}:</label>
-    {["depth_m", "distance_to_shore"].includes(feature) ? (
-      // display for depth_m and distance_to_shore
-      <span style={{ marginLeft: "10px" }}>{featureValues[feature]}</span>
-    ) : (
-      // sliders for other features
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <input
-          type="range"
-          id={feature}
-          name={feature}
-          className="year-slider"
-          min={0} 
-          max={100} 
-          step={0.1}
-          value={featureValues[feature]}
-          onChange={(e) => handleFeatureChange(feature, parseFloat(e.target.value))}
-        />
-        <span style={{ marginLeft: "10px" }}>{featureValues[feature]}</span>
-      </div>
-    )}
-  </div>
-))}
+    <h3></h3>
+    {Object.keys(featureValues).map((feature) => {
+      let min = 0; // default min value
+      let max = 100; // default max value
 
+      switch (feature) {
+        case "turbidity":
+          min = 0.0;
+          max = 1.1635;
+          break;
+        case "cyclone_frequency":
+          min = 19.86;
+          max = 92.3;
+          break;
+        case "climsst":
+          min = 262.15;
+          max = 307.04;
+          break;
+        case "temperature_kelvin":
+          min = 291.64;
+          max = 307.05;
+          break;
+        case "windspeed":
+          min = 0.0;
+          max = 14.0;
+          break;
+        case "ssta_minimum":
+          min = -7.33;
+          max = 0.0;
+          break;
+        case "ssta_maximum":
+          min = 0.0;
+          max = 13.19;
+          break;
+        case "nutrient_indicator_algae":
+          min = 0.0;
+          max = 87.5;
+          break;
+        default:
+          break;
+      }
 
-    <button onClick={handleSubmit}>Get Prediction</button>
-    {prediction && <p>Prediction: {prediction}</p>} {/* Display the prediction */}
-    <button onClick={handleModalClose}>Close</button>
+      return (
+        <div key={feature} style={{ marginBottom: "15px" }}>
+          <label htmlFor={feature}>{feature.replace("_", " ")}:</label>
+          {["depth_m", "distance_to_shore"].includes(feature) ? (
+            <span style={{ marginLeft: "10px" }}>{featureValues[feature]}</span>
+          ) : (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <input
+                type="range"
+                id={feature}
+                name={feature}
+                className="year-slider"
+                min={min}
+                max={max}
+                step={0.01}
+                value={featureValues[feature]}
+                onChange={(e) => handleFeatureChange(feature, parseFloat(e.target.value))}
+              />
+              <span style={{ marginLeft: "10px" }}>{featureValues[feature]}</span>
+            </div>
+          )}
+        </div>
+      );
+    })}
+
+<div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "20px" }}>
+  {/* Get Prediction Button */}
+  <button
+    className="toggleButton"
+    onClick={() => {
+      setPrediction(null); // clear previous prediction
+      setLoading(true); // loading animation
+      handleSubmit(); // prediction API call
+    }}
+  >
+    Get Prediction
+  </button>
+
+  {/* Loading Animation */}
+  {loading && (
+    <div style={{ marginTop: "20px", fontSize: "16px", fontWeight: "bold", color: "#715eb7" }}>
+      Loading...
+      <div
+        style={{
+          marginTop: "10px",
+          width: "50px",
+          height: "50px",
+          border: "5px solid #f3f3f3",
+          borderTop: "5px solid #715eb7",
+          borderRadius: "50%",
+          animation: "spin 1s linear infinite",
+        }}
+      ></div>
+    </div>
+  )}
+
+  {/* Prediction Display */}
+  {!loading && prediction && (
+    <div
+      style={{
+        marginTop: "20px",
+        width: "250px",
+        padding: "15px",
+        borderRadius: "20px",
+        backgroundColor:
+          colorblindMode
+            ? prediction === "poor"
+             ? "#FFD700"
+             : prediction === "fair"
+             ? "#00D900"
+             : prediction === "good"
+             ? "#FF00AA"
+             : "#cccccc"
+           : prediction === "poor"
+            ? "#ff0000"
+           : prediction === "fair"
+           ? "#ffa500"
+           : prediction === "good"
+           ? "#00ff00"
+           : "#cccccc",
+
+        color: "#fff",
+        textAlign: "center",
+        fontSize: "18px",
+        fontWeight: "bold",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {prediction}
+    </div>
+  )}
+</div>
+
+    <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }}></div>
   </div>
 )}
+      
+
 
 
       <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }}></div>

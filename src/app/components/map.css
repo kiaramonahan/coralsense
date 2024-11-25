@@ -10,16 +10,16 @@
     font-size: 16px;
     width: 200px;
     text-align: center;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+    transition: background-color 0.3s ease, transform 0.3s ease; 
   }
   
   /* Hover effect */
   .toggleButton:hover {
-    background-color: #484682; /* New hover color */
+    background-color: #484682; 
   }
   
   .toggleButton.active {
-    background-color: #1e2e4d; /* New active color */
+    background-color: #1e2e4d; 
   }
 
 /* Toolbar  */
@@ -209,18 +209,28 @@ input:checked + .slider:before {
   transform: translate(-50%, -50%);
   background-color: white;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  width: 400px;
+  width: 500px;
   max-height: 80vh;
   overflow-y: auto;
 }
 
 .modal button {
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 .modal h2 {
   margin-bottom: 20px;
+}
+
+/* Loading Spinner Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

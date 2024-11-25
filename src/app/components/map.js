@@ -385,7 +385,7 @@ const handleSubmit = () => {
              marginTop: "10px",
             }}
           >
-            <label style={{ marginRight: "10px" }}>Colorblind Mode</label>
+            <label style={{ marginRight: "10px" }}>Accessible Colors</label>
             <label className="switch">
              <input type="checkbox" checked={colorblindMode} onChange={toggleColorblindMode} />
              <span className="slider round"></span>

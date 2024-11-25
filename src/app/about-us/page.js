@@ -54,7 +54,7 @@ export default function AboutUs() {
               <h3 className="text-xl font-semibold">Theresa Sumarta</h3>
               <p className="text-sm mb-2">UC Berkeley MIDS Student</p>
               <a href="https://www.linkedin.com/in/theresa" target="_blank" rel="noopener noreferrer" className="text-blue-500">LinkedIn</a>
-              <p className="text-sm mt-2">[Brief bio for Theresa, highlighting background, skills, and interests related to CoralSense]</p>
+              <p className="text-sm mt-2">Tigran Poladian is a Software Engineering leader with decades of experience and a downward career spiral with projects spanning Space, Air, Ground and Sea domains. A recent trip to the Caribbean re-ignited a passion to work on environmental projects after seeing bleached and devastated coral firsthand. He holds a Bachelor's in Math & Applied Science and a Master's in Computer Science - Robotics and is currently completing his second graduate degree from University of California, Berkeley in Information and Data Science.</p>
             </div>
 
             {/* Team Member 5 - Tigran Poladian */}

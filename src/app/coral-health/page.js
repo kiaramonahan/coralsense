@@ -37,6 +37,56 @@ const CoralHealth = () => {
             />
           </div>
         </section>
+        <br></br><br></br><br></br>
+        {/* Section for Coral Bleaching */}
+        <section className="max-w-4xl mb-12">
+          <h2 className="text-3xl font-semibold mb-4">Coral Bleaching</h2>
+          <p className="text-lg mb-6">
+          Coral bleaching is a major threat to reef health worldwide, largely due to climate change. This image shows a reef in American Samoa healthy, before bleaching in 2014 (left), during bleaching in early 2015 (middle), and dead after bleaching late 2015 (right).
+          </p>
+          <div className="flex justify-center mb-6">
+            <img 
+              src="OceanImageBank_TheOceanAgency_BeforeAfter_04.jpg" 
+              alt="Before, during, and after coral bleaching in American Samoa." 
+              className="rounded-lg shadow-lg max-w-full h-auto"
+            />
+          </div>
+          <p className="text-sm mb-6">
+          Image source: Ocean Image Bank, The Ocean Agency
+          </p>
+          <br></br>
+          <p className="text-lg mb-6">
+          The image below shows a reef in Hawaii before bleaching in August 2015 (left) and after bleaching just a few months later in November 2015 (right).
+          </p>
+          <div className="flex justify-center mb-6">
+            <img 
+              src="OceanImageBank_TheOceanAgency_BeforeAfter_06.jpg" 
+              alt="Before, and after coral bleaching in Hawaii." 
+              className="rounded-lg shadow-lg max-w-full h-auto"
+            />
+          </div>
+          <p className="text-sm mb-6">
+          Image source: Ocean Image Bank, The Ocean Agency
+          </p>
+        </section>
+
+        {/* Section for Coral Restoration */}
+        <section className="max-w-4xl mb-12">
+          <h2 className="text-3xl font-semibold mb-4">Coral Restoration</h2>
+          <p className="text-lg mb-6">
+          Coral reef health can improve in the right conditions. This photo shows a coral reef near Komodo, Indonesia before (2015) and after (2019) restoration. Note the poor coral health on the left. 
+          </p>
+          <div className="flex justify-center mb-6">
+            <img 
+              src="OceanImageBank_MartinColognoli_25.jpg" 
+              alt="Before and after coral reef restoration in Indonesia" 
+              className="rounded-lg shadow-lg max-w-full h-auto"
+            />
+          </div>
+          <p className="text-sm mb-6">
+          Image source: Ocean Image Bank, Martinn Colognoli 
+          </p>
+        </section>
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ export default function Map() {
     setPrediction(null);
   };
 
-  const apiUrl = "https://cors-anywhere.herokuapp.com/https://model-serving-1091990692437.us-central1.run.app/predict";
+  const apiUrl = "https://model-serving-1091990692437.us-central1.run.app/predict";
 
 
 const handleSubmit = () => {

@@ -201,3 +201,26 @@ input:checked + .slider:before {
 .year-slider:focus {
   box-shadow: 0 0 5px #715eb7;
 }
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal button {
+  margin-top: 20px;
+}
+
+.modal h2 {
+  margin-bottom: 20px;
+}

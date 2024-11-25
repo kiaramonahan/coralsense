@@ -12,6 +12,87 @@ export default function Map() {
   const [year, setYear] = useState(2018);
   const [showInstructions, setShowInstructions] = useState(false);
   const [colorblindMode, setColorblindMode] = useState(false);
+  const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
+  const [countryName, setCountryName] = useState("");
+  const [ecoregion, setEcoregion] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [featureValues, setFeatureValues] = useState({
+    depth_m: 10,
+    distance_to_shore: 50,
+    turbidity: 1.5,
+    cyclone_frequency: 2,
+    climsst: 28,
+   temperature_kelvin: 301,
+   windspeed: 5,
+    ssta_minimum: -1,
+    ssta_maximum: 2,
+   nutrient_indicator_algae: 0.5,
+  });
+  const [prediction, setPrediction] = useState(null);
+
+  const handleFeatureChange = (feature, value) => {
+   setFeatureValues((prev) => ({ ...prev, [feature]: value }));
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    setPrediction(null);
+  };
+
+  const handleSubmit = () => {
+    const apiUrl = "https://model-serving-1091990692437.us-central1.run.app/predict";
+  
+    // Ensure the features are sent in the correct order
+    const featureOrder = [
+      "depth_m",
+      "distance_to_shore",
+      "turbidity",
+      "cyclone_frequency",
+      "climsst",
+      "temperature_kelvin",
+      "windspeed",
+      "ssta_minimum",
+      "ssta_maximum",
+      "nutrient_indicator_algae",
+    ];
+  
+    const requestBody = {
+      features: [
+        featureOrder.map((key) => featureValues[key]), // Create array based on the correct order
+      ],
+    };
+  
+    console.log("Requesting prediction with payload:", requestBody);
+  
+    // Make the API call
+    fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    })
+      .then((response) => {
+        console.log("API Response Status:", response.status);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("API Response Data:", data);
+        setPrediction(data.predictions[0]); // Update prediction with the first value
+      })
+      .catch((error) => {
+        console.error("Error during API call:", error);
+        setPrediction("Error fetching prediction");
+      });
+  };
+  
+  
+  
+  
+
 
   useEffect(() => {
     if (mapRef.current) return;
@@ -89,6 +170,46 @@ export default function Map() {
 
       map.on("mouseleave", "latest-datapoints-layer", () => {
         popup.remove();
+      });
+
+      map.on("click", "latest-datapoints-layer", (e) => {
+        const {
+          depth_m,
+          distance_to_shore,
+          turbidity,
+          cyclone_frequency,
+          climsst,
+          temperature_kelvin,
+          windspeed,
+          ssta_minimum,
+          ssta_maximum,
+          nutrient_indicator_algae,
+          latitude_degrees,
+          longitude_degrees,
+          country_name,
+          ecoregion,
+        } = e.features[0].properties;
+  
+        // Populate feature values and open modal
+        setFeatureValues({
+          depth_m,
+          distance_to_shore,
+          turbidity,
+          cyclone_frequency,
+          climsst,
+          temperature_kelvin,
+          windspeed,
+          ssta_minimum,
+          ssta_maximum,
+          nutrient_indicator_algae,
+        });
+        setCoordinates({
+          lat: latitude_degrees, // Use latitude_degrees
+          lng: longitude_degrees, // Use longitude_degrees
+        });
+        setCountryName(country_name);
+        setEcoregion(ecoregion);
+        setModalVisible(true);
       });
 
       map.addSource("dataset", {
@@ -316,6 +437,8 @@ export default function Map() {
           borderRadius: "15px",
           zIndex: 1,
         }}
+
+        
       >
         {activeLayer === "reef-layer" ? (
           <div className="legend-item" style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
@@ -388,6 +511,49 @@ export default function Map() {
           </>
         )}
       </div>
+
+      {modalVisible && (
+  <div className="modal">
+    <h2>Reef Details</h2>
+    <div style={{ marginBottom: "15px" }}>
+      <p><strong>Coordinates:</strong> {coordinates.lat.toFixed(2)}, {coordinates.lng.toFixed(2)}</p>
+      <p><strong>Country:</strong> {countryName}</p>
+      <p><strong>Ecoregion:</strong> {ecoregion}</p>
+    </div>
+    <h3>Adjust Features</h3>
+    {Object.keys(featureValues).map((feature) => (
+  <div key={feature} style={{ marginBottom: "15px" }}>
+    <label htmlFor={feature}>{feature.replace("_", " ")}:</label>
+    {["depth_m", "distance_to_shore"].includes(feature) ? (
+      // display for depth_m and distance_to_shore
+      <span style={{ marginLeft: "10px" }}>{featureValues[feature]}</span>
+    ) : (
+      // sliders for other features
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <input
+          type="range"
+          id={feature}
+          name={feature}
+          className="year-slider"
+          min={0} 
+          max={100} 
+          step={0.1}
+          value={featureValues[feature]}
+          onChange={(e) => handleFeatureChange(feature, parseFloat(e.target.value))}
+        />
+        <span style={{ marginLeft: "10px" }}>{featureValues[feature]}</span>
+      </div>
+    )}
+  </div>
+))}
+
+
+    <button onClick={handleSubmit}>Get Prediction</button>
+    {prediction && <p>Prediction: {prediction}</p>} {/* Display the prediction */}
+    <button onClick={handleModalClose}>Close</button>
+  </div>
+)}
+
 
       <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }}></div>
     </div>

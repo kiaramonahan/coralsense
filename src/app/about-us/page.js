@@ -50,11 +50,11 @@ export default function AboutUs() {
 
             {/* Team Member 4 - Theresa Sumarta */}
             <div className="text-left">
-              <img src="/path/to/theresa.jpg" alt="Theresa Sumarta" className="w-32 h-32 rounded-full mb-4" />
+              <img src="/theresa_image.png" alt="Theresa Sumarta" className="w-32 h-32 rounded-full mb-4" />
               <h3 className="text-xl font-semibold">Theresa Sumarta</h3>
               <p className="text-sm mb-2">UC Berkeley MIDS Student</p>
-              <a href="https://www.linkedin.com/in/theresa" target="_blank" rel="noopener noreferrer" className="text-blue-500">LinkedIn</a>
-              <p className="text-sm mt-2">Theresa Bio</p>
+              <a href="https://www.linkedin.com/in/theresa-sumarta/" target="_blank" rel="noopener noreferrer" className="text-blue-500">LinkedIn</a>
+              <p className="text-sm mt-2">Theresa Sumarta is a Master’s student in Information and Data Science at UC Berkeley, with a strong foundation in Chemical Engineering from the University of Washington. She has developed her expertise through professional experience by enhancing process stability with statistical modeling, streamlining data analysis through automation, and advancing product development using machine learning and experimental design. Passionate about leveraging advanced data science techniques to tackle complex challenges, Theresa is eager to apply her skills in machine learning, generative AI, and statistical analysis to create innovative, data-driven solutions that deliver transformative outcomes.</p>
             </div>
 
             {/* Team Member 5 - Tigran Poladian */}

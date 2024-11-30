@@ -39,6 +39,12 @@ const GetInvolved = () => {
             >
              Learn About Coral Reefs
             </a>
+            <a
+              href="https://youtu.be/aGGBGcjdjXA?feature=shared"
+              className="inline-block bg-[#715eb7] hover:bg-[#5e4aa2] text-white font-semibold py-2 px-4 rounded-full"
+            >
+              Chasing Coral
+            </a>
           </div>
         </section>
 

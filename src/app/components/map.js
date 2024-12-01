@@ -23,8 +23,8 @@ export default function Map() {
     turbidity: 1.5,
     cyclone_frequency: 2,
     climsst: 28,
-   temperature_kelvin: 301,
-   windspeed: 5,
+    temperature_kelvin: 301,
+    windspeed: 5,
     ssta_minimum: -1,
     ssta_maximum: 2,
    nutrient_indicator_algae: 0.5,
@@ -525,7 +525,7 @@ const handleSubmit = () => {
       style={{
         position: "absolute",
         top: "0px",
-        right: "5px",
+        right: "10px",
         backgroundColor: "transparent",
         border: "none",
         fontSize: "18px",
@@ -545,47 +545,73 @@ const handleSubmit = () => {
     {Object.keys(featureValues).map((feature) => {
       let min = 0; // default min value
       let max = 100; // default max value
+      let text = "";
+      let tooltiptext = ""
 
       switch (feature) {
+        case "depth_m":
+          text = "Depth (m)";
+          tooltiptext = "Depth of site in meters";
+          break;
+        case "distance_to_shore":
+          text = "Distance to Shore (m)";
+          tooltiptext = "Distance of site to shore in meters";
+          break;
         case "turbidity":
           min = 0.0;
           max = 1.1635;
+          text = "Turbidity (m⁻¹)";
+          tooltiptext = "Measure of water clarity based on the diffuse attenuation coefficient of light at 490 nm (Kd490), given in reciprocal meters (m⁻¹)";
           break;
         case "cyclone_frequency":
           min = 19.86;
           max = 92.3;
+          text = "Cyclone Frequency";
+          tooltiptext = "Number of cyclone events from 1964 to 2014";
           break;
         case "climsst":
           min = 262.15;
           max = 307.04;
+          text = "Climatological Sea Surface Temperature (SST) (K)";
+          tooltiptext = "Climatological Sea Surface Temperature (SST) based on weekly SSTs for the study time frame, created using a harmonics approach, given in Kelvin";
           break;
         case "temperature_kelvin":
           min = 291.64;
           max = 307.05;
+          text = "Sea Surface Temperature (SST) (K)";
+          tooltiptext = "Sea Surface Temperature (SST) in Kelvin";
           break;
         case "windspeed":
           min = 0.0;
           max = 14.0;
+          text = "Windspeed (m/hr)";
+          tooltiptext = "Windspeed, which can affect waves and temperature, in meters per hour";
           break;
         case "ssta_minimum":
           min = -7.33;
           max = 0.0;
+          text = "Sea Surface Temperature Anomaly (SSTA) Minimum (°C/K)";
+          tooltiptext = "Sea Surface Temperature Anomaly: weekly SST minus weekly climatological SST in degrees Celsius or Kelvin. Minimum SSTA is the minimum SSTA over the study period.";
           break;
         case "ssta_maximum":
           min = 0.0;
           max = 13.19;
+          text = "Sea Surface Temperature Anomaly (SSTA) Maximum (°C/K)";
+          tooltiptext = "Sea Surface Temperature Anomaly: weekly SST minus weekly climatological SST in degrees Celsius or Kelvin. Maximum SSTA is the maximum SSTA over the study period.";
           break;
         case "nutrient_indicator_algae":
           min = 0.0;
           max = 87.5;
+          text = "Nutrient Indicator Algae Percent Cover";
+          tooltiptext = "The percent cover of nutrient indicator algae can indicate levels of nutrients in the water or nutrient pollution."
           break;
         default:
           break;
       }
 
       return (
-        <div key={feature} style={{ marginBottom: "15px" }}>
-          <label htmlFor={feature}>{feature.replace("_", " ")}:</label>
+        <div key={feature} style={{ marginBottom: "15px"}}>
+          <label class="label-with-tooltip" data-tooltip={tooltiptext}>{text}:</label>
           {["depth_m", "distance_to_shore"].includes(feature) ? (
             <span style={{ marginLeft: "10px" }}>{featureValues[feature]}</span>
           ) : (

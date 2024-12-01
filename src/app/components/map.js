@@ -538,7 +538,7 @@ const handleSubmit = () => {
     </button>
     <div style={{ marginBottom: "15px" }}>
       <p><strong>Coordinates:</strong> {coordinates.lat.toFixed(2)}, {coordinates.lng.toFixed(2)}</p>
-      <p><strong>Country:</strong> {countryName}</p>
+      <p><strong>Country/Region:</strong> {countryName}</p>
       <p><strong>Ecoregion:</strong> {ecoregion}</p>
     </div>
     <h3></h3>

@@ -9,18 +9,8 @@ const GetInvolved = () => {
         {/* Page Title */}
         <h1 className="text-4xl font-bold mb-8 text-center">Get Involved</h1>
 
-
-        {/* Partnerships Section */}
-        <section className="max-w-4xl mb-12">
-          <h2 className="text-3xl font-semibold mb-4">Partner with Us</h2>
-          <p className="text-lg mb-6">
-            Collaborate with CoralSense to amplify our impact. We’re always looking for meaningful partnerships with organizations that share our vision. <br></br>
-            Email us at kmonahan@berkeley.edu
-          </p>
-        </section>
-
         {/* Educational Resources Section */}
-        <section className="max-w-4xl mb-12"> {/* Added mb-12 */}
+        <section className="max-w-4xl mb-12"> 
           <h2 className="text-3xl font-semibold mb-4">Educational Resources</h2>
           <p className="text-lg mb-6">
            Learn more about coral reef ecosystems and how you can help. Access guides, videos, and lesson plans to educate and inspire action.
@@ -50,7 +40,7 @@ const GetInvolved = () => {
 
 
         {/* Donations Section */}
-        <section className="max-w-4xl mb-12"> {/* Added mb-12 */}
+        <section className="max-w-4xl mb-12"> 
           <h2 className="text-3xl font-semibold mb-4">Make a Donation</h2>
           <p className="text-lg mb-6">
             Donate to organizations like the Coral Reef Alliance or The Nature Conservancy that are working to save, protect, and restore coral reefs.
@@ -92,6 +82,15 @@ const GetInvolved = () => {
              Reef Check Volunteer Opportunities
            </a>
           </div>
+        </section>
+
+        {/* Partnerships Section */}
+        <section className="max-w-4xl mb-12">
+          <h2 className="text-3xl font-semibold mb-4">Partner with Us</h2>
+          <p className="text-lg mb-6">
+            Collaborate with CoralSense to amplify our impact. We’re always looking for meaningful partnerships with organizations that share our vision. <br></br>
+            Email us at kmonahan@berkeley.edu
+          </p>
         </section>
 
 

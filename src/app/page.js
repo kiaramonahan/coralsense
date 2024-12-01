@@ -8,10 +8,10 @@ export default function Home() {
       </div>
       {/* Text Section */}
       <div style={{ maxWidth: "50%", color: "white", padding: "20px" }}>
-          <h1 style={{ fontSize: "3rem", fontWeight: "bold", whiteSpace: "nowrap", marginBottom: "20px" }}>
+          <h1 style={{ fontSize: "3rem", fontWeight: "bold", whiteSpace: "nowrap", marginBottom: "20px", fontFamily: "Helvetica"}}>
             Welcome to CoralSense
           </h1>
-          <p style={{ fontSize: "1.2rem", lineHeight: "1.5" }}>
+          <p style={{ fontSize: "1.2rem", lineHeight: "1.5", fontFamily: "Helvetica-light" }}>
           "Coral reefs are a jeweled belt around the middle of the planet." - Dr. Sylvia Earle, Oceanographer
           </p>
         </div>

@@ -666,42 +666,44 @@ const handleSubmit = () => {
   )}
 
   {/* Prediction Display */}
-  {!loading && prediction && (
-    <div
-      style={{
-        marginTop: "20px",
-        width: "250px",
-        padding: "15px",
-        borderRadius: "20px",
-        backgroundColor:
-          colorblindMode
-            ? prediction === "poor"
-             ? "#FFD700"
-             : prediction === "fair"
-             ? "#00D900"
-             : prediction === "good"
-             ? "#FF00AA"
-             : "#cccccc"
-           : prediction === "poor"
-            ? "#ff0000"
-           : prediction === "fair"
-           ? "#ffa500"
-           : prediction === "good"
-           ? "#00ff00"
-           : "#cccccc",
+{!loading && prediction && (
+  <div
+    style={{
+      marginTop: "20px",
+      width: "250px",
+      padding: "15px",
+      borderRadius: "20px",
+      backgroundColor:
+        colorblindMode
+          ? prediction === "poor"
+            ? "#FFD700"
+            : prediction === "fair"
+            ? "#00D900"
+            : prediction === "good"
+            ? "#FF00AA"
+            : "#cccccc"
+          : prediction === "poor"
+          ? "#ff0000"
+          : prediction === "fair"
+          ? "#ffa500"
+          : prediction === "good"
+          ? "#00ff00"
+          : "#cccccc",
+      color: "#fff",
+      textAlign: "center",
+      fontSize: "18px",
+      fontWeight: "bold",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+  >
+    {prediction === "good" && "Healthy"}
+    {prediction === "poor" && "Unhealthy"}
+    {prediction === "fair" && "Fair"}
+  </div>
+)}
 
-        color: "#fff",
-        textAlign: "center",
-        fontSize: "18px",
-        fontWeight: "bold",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      {prediction}
-    </div>
-  )}
 </div>
 
     <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }}></div>

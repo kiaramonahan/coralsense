@@ -10,7 +10,7 @@ export default function Map() {
   const [activeLayer, setActiveLayer] = useState("reef-layer"); // default reef layer
   const mapRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  const [year, setYear] = useState(2018);
+  const [year, setYear] = useState("2030");
   const [showInstructions, setShowInstructions] = useState(false);
   const [colorblindMode, setColorblindMode] = useState(false);
   const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
@@ -221,7 +221,7 @@ const handleSubmit = () => {
 
       map.addSource("dataset", {
         type: "geojson",
-        data: "./cleaned_data.geojson",
+        data: "./results_forecast.geojson",
       });
       map.addLayer({
         id: "predictions-layer",
@@ -239,17 +239,16 @@ const handleSubmit = () => {
           ],
           "circle-opacity": 0.8,
         },
-        filter: ["==", ["number", ["get", "date_year"]], year],
+        filter: ["==", ["get", "year"], String(year)],
         visibility: "none", // hidden by default
       });
 
       map.on("mousemove", "predictions-layer", (e) => {
-        const { country_name, ecoregion, hard_coral_class } = e.features[0].properties;
+        const {hard_coral_class} = e.features[0].properties;
         popup
           .setLngLat(e.lngLat)
           .setHTML(
-            `<strong>Country/region:</strong> ${country_name}<br/>
-            <strong>Ecoregion:</strong> ${ecoregion}<br/>
+            `
              <strong>Hard Coral Cover Prediction:</strong> ${hard_coral_class}`
           )
           .addTo(map);
@@ -310,14 +309,22 @@ const handleSubmit = () => {
     if (mapRef.current && mapRef.current.getLayer("predictions-layer") && activeLayer === "predictions-layer") {
       mapRef.current.setFilter("predictions-layer", [
         "==",
-        ["number", ["get", "date_year"]],
-        year,
+        ["get", "year"],
+        String(year), // Ensure `year` is compared as a string
       ]);
     }
   }, [year, activeLayer]);
+  
 
-  const handleYearChange = (event) => {
-    setYear(parseInt(event.target.value, 10));
+  const handleYearChange = (newYear) => {
+    setYear(String(newYear)); // Update the year state as a string
+    if (mapRef.current && mapRef.current.getLayer("predictions-layer")) {
+      mapRef.current.setFilter("predictions-layer", [
+        "==",
+        ["get", "year"],
+        String(newYear), // Use the updated year for the filter
+      ]);
+    }
   };
 
   const showLayer = (layerToShow) => {
@@ -413,11 +420,11 @@ const handleSubmit = () => {
              id="year-slider"
              className="year-slider"
              type="range"
-             min="2016"
-             max="2020"
-             step="1"
+             min="2030"
+             max="2040"
+             step="5"
              value={year}
-              onChange={handleYearChange}
+             onChange={(e) => handleYearChange(e.target.value)}
            />
          </div>
         )}
@@ -445,7 +452,7 @@ const handleSubmit = () => {
 
         
       >
-        {activeLayer === "reef-layer" ? (
+        {activeLayer === "reef-layer" && (
           <div className="legend-item" style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
             <div
               className="legend-color"
@@ -459,8 +466,10 @@ const handleSubmit = () => {
             ></div>
             <span>Reef</span>
           </div>
-        ) : (
-          <>
+        )}
+
+          {activeLayer === "latest-datapoints-layer" && (
+            <>
             <div className="legend-item" style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
               <div
                 className="legend-color"
@@ -513,7 +522,50 @@ const handleSubmit = () => {
               ></div>
               <span>Poor Coral Cover</span>
             </div>
-          </>
+            </>
+          )}
+            {activeLayer === "predictions-layer" && (
+              <>
+              <div className="legend-item" style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
+                <div
+                  className="legend-color"
+                  style={{
+                    width: "20px",
+                   height: "20px",
+                   backgroundColor: "#00faff",
+                   marginRight: "10px",
+                   borderRadius: "3px",
+                  }}
+                ></div>
+                <span>Reef</span>
+                </div>
+              <div className="legend-item" style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
+                <div
+                  className="legend-color"
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    backgroundColor: colorblindMode ? "#FF00AA" : "#00ff00",
+                    marginRight: "10px",
+                    borderRadius: "3px",
+                  }}
+                ></div>
+                <span>Healthy</span>
+              </div>
+              <div className="legend-item" style={{ display: "flex", alignItems: "center" }}>
+                <div
+                  className="legend-color"
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    backgroundColor: colorblindMode ? "#FFD700" : "#ff0000",
+                    marginRight: "10px",
+                    borderRadius: "3px",
+                  }}
+                ></div>
+                <span>Unhealthy</span>
+              </div>
+            </>
         )}
       </div>
 

@@ -1,3 +1,11 @@
+body {
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  
+  margin: 0; 
+  padding: 0; 
+}
+
+
 /* Button styling */
 .toggleButton {
     background-color: #715eb7;
@@ -8,7 +16,7 @@
     border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
-    width: 200px;
+    width: 215px;
     text-align: center;
     transition: background-color 0.3s ease, transform 0.3s ease; 
   }

@@ -221,7 +221,7 @@ const handleSubmit = () => {
 
       map.addSource("dataset", {
         type: "geojson",
-        data: "./results_forecast.geojson",
+        data: "./bleaching.geojson",
       });
       map.addLayer({
         id: "predictions-layer",
@@ -231,28 +231,42 @@ const handleSubmit = () => {
         paint: {
           "circle-color": [
             "match",
-            ["get", "hard_coral_class"],
-              "Poor", "#ff0000",
+            ["get", "bleaching_status"],
+              "bleaching", "#ff0000",
               "Fair", "#ffa500",
-              "Good", "#00ff00",
+              "low_bleaching", "#00ff00",
               "#cccccc",
           ],
           "circle-opacity": 0.8,
         },
-        filter: ["==", ["get", "year"], String(year)],
+        filter: ["==", ["get", "date_year"], String(year)],
         visibility: "none", // hidden by default
       });
 
       map.on("mousemove", "predictions-layer", (e) => {
-        const {hard_coral_class} = e.features[0].properties;
+        const { country_name, ecoregion, date_year, bleaching_status } = e.features[0].properties;
+      
+        const bleachingMessage =
+          bleaching_status === "low_bleaching"
+            ? "Low/Moderate Bleaching (&lt;40% of Corals)" 
+            : bleaching_status === "bleaching"
+            ? "Severe Bleaching (&gt;40% of Corals)"
+            : "Unknown Bleaching Status";
+      
         popup
           .setLngLat(e.lngLat)
           .setHTML(
             `
-             <strong>Hard Coral Cover Prediction:</strong> ${hard_coral_class}`
+              <strong style="font-weight: 800;">Country/region:</strong> ${country_name}<br/>
+              <strong style="font-weight: 800;">Ecoregion:</strong> ${ecoregion}<br/>
+              <strong style="font-weight: 800;">Year:</strong> ${date_year}<br/>
+              <strong style="font-weight: 800;">Bleaching Prediction:</strong> ${bleachingMessage}
+            `
           )
           .addTo(map);
       });
+      
+      
 
       map.on("mouseleave", "predictions-layer", () => {
         popup.remove();
@@ -296,10 +310,10 @@ const handleSubmit = () => {
     if (mapRef.current.getLayer("predictions-layer")) {
       mapRef.current.setPaintProperty("predictions-layer", "circle-color", [
         "match",
-        ["get", "hard_coral_class"],
-        "Poor", colorBlindColors.Poor,
+        ["get", "bleaching_status"],
+        "bleaching", colorBlindColors.Poor,
         "Fair", colorBlindColors.Fair,
-        "Good", colorBlindColors.Good,
+        "low_bleaching", colorBlindColors.Good,
         "#cccccc",
       ]);
     }
@@ -309,8 +323,8 @@ const handleSubmit = () => {
     if (mapRef.current && mapRef.current.getLayer("predictions-layer") && activeLayer === "predictions-layer") {
       mapRef.current.setFilter("predictions-layer", [
         "==",
-        ["get", "year"],
-        String(year), // Ensure `year` is compared as a string
+        ["get", "date_year"],
+        Number(year), // Ensure `year` is compared as a string
       ]);
     }
   }, [year, activeLayer]);
@@ -321,8 +335,8 @@ const handleSubmit = () => {
     if (mapRef.current && mapRef.current.getLayer("predictions-layer")) {
       mapRef.current.setFilter("predictions-layer", [
         "==",
-        ["get", "year"],
-        String(newYear), // Use the updated year for the filter
+        ["get", "date_year"],
+        Number(newYear), // Use the updated year for the filter
       ]);
     }
   };
@@ -355,6 +369,7 @@ const handleSubmit = () => {
           borderRadius: "15px",
           zIndex: 1,
           textAlign: "center",
+          
         }}
       >
         <div className="logo-image" style={{ display: "flex", alignItems: "center" }}>
@@ -363,7 +378,7 @@ const handleSubmit = () => {
               src="logo_no_background.png"
               alt="Logo"
               style={{
-                maxWidth: "150px",
+                maxWidth: "180px",
                 height: "auto",
                 marginBottom: "10px",
               }}
@@ -406,8 +421,8 @@ const handleSubmit = () => {
           <button id="toggleLatestDatapointsLayerButton" onClick={() => showLayer("latest-datapoints-layer")} className={`toggleButton ${activeLayer === "latest-datapoints-layer" ? "active" : ""}`}>
             Last Known Reef Health
           </button>
-          <button id="togglePredictionsLayerButton" onClick={() => showLayer("predictions-layer")} className={`toggleButton ${activeLayer === "predictions-layer" ? "active" : ""}`}>
-            Reef Health Predictions
+          <button id="togglePredictionsLayerButton" onClick={() => showLayer("predictions-layer")} className={`toggleButton ${activeLayer === "predictions-layer" ? "active" : ""}`}style={{ whiteSpace: "nowrap" }}>
+            Coral Bleaching Predictions
           </button>
         </div>
 
@@ -433,7 +448,7 @@ const handleSubmit = () => {
       {showInstructions && (
         <div className="instructions-popup">
           <h3>Map Tips</h3>
-          <p>Use the toolbar to switch between <b>Reef Distributions</b>, <b>Last Known Reef Health</b>, and <b>Reef Health Predictions</b>. Adjust the year using the slider to view predictions for different years. Hover over points for detailed information. Scroll to zoom in or out, and be sure to drag the map around to explore. A legend is available in the bottom left corner of the map. <br></br><br></br><b>Reef Distributions</b> shows where reefs are around the globe.<br></br><b>Last Known Reef Health</b> shows the most current reef health, based on hard coral cover, for each location. If you click on a datapoint, you can simulate changing environmental and climate features using our model to see how the coral cover would be predicted to change. <br></br><b>Reef Health Predictions</b> are predictions of hard coral cover from our models. You can read more about our prediction process on our main site.</p>
+          <p>Use the toolbar to switch between <b>Reef Distributions</b>, <b>Last Known Reef Health</b>, and <b>Bleaching Predictions</b>. Adjust the year using the slider to view predictions for different years. Hover over points for detailed information. Scroll to zoom in or out, and be sure to drag the map around to explore. A legend is available in the bottom left corner of the map. <br></br><br></br><b>Reef Distributions</b> shows where reefs are around the globe.<br></br><b>Last Known Reef Health</b> shows the most current reef health, based on hard coral cover, for each location. If you click on a datapoint, you can simulate changing environmental and climate features using our model to see how the coral cover would be predicted to change. <br></br><b>Bleaching Predictions</b> are predictions of the percentage of corals bleached at various locations. You can read more about our prediction process on our main site.</p>
           <button onClick={() => setShowInstructions(false)} className="close-button">Close</button>
         </div>
       )}
@@ -550,7 +565,7 @@ const handleSubmit = () => {
                     borderRadius: "3px",
                   }}
                 ></div>
-                <span>Healthy</span>
+                <span>Low/Moderate Bleaching (&lt;40% of Corals)</span>
               </div>
               <div className="legend-item" style={{ display: "flex", alignItems: "center" }}>
                 <div
@@ -563,7 +578,7 @@ const handleSubmit = () => {
                     borderRadius: "3px",
                   }}
                 ></div>
-                <span>Unhealthy</span>
+                <span>Severe Bleaching (&gt;40% of Corals)</span>
               </div>
             </>
         )}

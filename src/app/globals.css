@@ -6,10 +6,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; 
 }
 
- /* Set the background color of the body */
- body {
+body {
     margin: 0;
     background-color: #1e2e4d;
     height: 100vh;
@@ -17,7 +17,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; 
 }
+
 
 /* Header container for logo and navbar */
 .header {

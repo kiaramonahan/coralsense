@@ -17,6 +17,81 @@ export default function Map() {
   const [countryName, setCountryName] = useState("");
   const [ecoregion, setEcoregion] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleBleaching, setModalVisibleBleaching] = useState(false);
+  const [featureValuesBleaching, setFeatureValuesBleaching] = useState({
+    depth_m: 10,
+    distance_to_shore: 50,
+    climsst: 28,
+    temperature_mean: 301,
+    windspeed: 5,
+    ssta_minimum: -1,
+    ssta_maximum: 2,
+    ssta_frequency: 0.5,
+  });
+  
+  const [predictionBleaching, setPredictionBleaching] = useState(null);
+  const [loadingBleaching, setLoadingBleaching] = useState(false);
+  
+  const handleFeatureChangeBleaching = (feature, value) => {
+    setFeatureValuesBleaching((prev) => ({ ...prev, [feature]: value }));
+  };
+  
+  const handleModalCloseBleaching = () => {
+    setModalVisibleBleaching(false);
+    setPredictionBleaching(null);
+  };
+  
+  const apiUrlBleaching = "https://model-serving-1091990692437.us-central1.run.app/predict_bleaching";
+  
+  const handleSubmitBleaching = () => {
+    // Format payload
+    const requestBodyBleaching = {
+      features: [
+        [
+          featureValuesBleaching.depth_m,
+          featureValuesBleaching.distance_to_shore,
+          featureValuesBleaching.climsst,
+          featureValuesBleaching.temperature_mean,
+          featureValuesBleaching.windspeed,
+          featureValuesBleaching.ssta_minimum,
+          featureValuesBleaching.ssta_maximum,
+          featureValuesBleaching.ssta_frequency,
+        ],
+      ],
+    };
+  
+    setPredictionBleaching(null); 
+    setLoadingBleaching(true); // Show loading animation
+    console.log("Requesting prediction with payload:", requestBodyBleaching);
+  
+    fetch(apiUrlBleaching, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBodyBleaching),
+    })
+      .then((response) => {
+        console.log("API Response Status:", response.status); 
+        if (!response.ok) {
+          return response.text().then((text) => {
+            console.error("API Error Response:", text); 
+            throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("API Response:", data);
+        setPredictionBleaching(data.predictions[0]); // Update prediction state
+        setLoadingBleaching(false); // Hide loading animation
+      })
+      .catch((error) => {
+        console.error("Error during API call:", error);
+        setPredictionBleaching("Error fetching prediction."); // Handle error
+        setLoadingBleaching(false); // Hide loading animation
+      });
+  };
   const [featureValues, setFeatureValues] = useState({
     depth_m: 10,
     distance_to_shore: 50,
@@ -94,11 +169,6 @@ const handleSubmit = () => {
     });
   
 };
-
-  
-  
-  
-  
 
 
   useEffect(() => {
@@ -242,6 +312,41 @@ const handleSubmit = () => {
         filter: ["==", ["get", "date_year"], String(year)],
         visibility: "none", // hidden by default
       });
+      map.on("click", "predictions-layer", (e) => {
+        const {
+          depth_m,
+          distance_to_shore,
+          climsst,
+          temperature_mean,
+          windspeed,
+          ssta_minimum,
+          ssta_maximum,
+          ssta_frequency,
+          latitude_degrees,
+          longitude_degrees,
+          country_name,
+          ecoregion,
+        } = e.features[0].properties;
+  
+        // Populate feature values and open modal
+        setFeatureValuesBleaching({
+          depth_m,
+          distance_to_shore,
+          climsst,
+          temperature_mean,
+          windspeed,
+          ssta_minimum,
+          ssta_maximum,
+          ssta_frequency,
+        });
+        setCoordinates({
+          lat: latitude_degrees, 
+          lng: longitude_degrees, 
+        });
+        setCountryName(country_name);
+        setEcoregion(ecoregion);
+        setModalVisibleBleaching(true);
+      });
 
       map.on("mousemove", "predictions-layer", (e) => {
         const { country_name, ecoregion, date_year, bleaching_status } = e.features[0].properties;
@@ -250,7 +355,7 @@ const handleSubmit = () => {
           bleaching_status === "low_bleaching"
             ? "Low/Moderate Bleaching (&lt;40% of Corals)" 
             : bleaching_status === "bleaching"
-            ? "Severe Bleaching (&gt;40% of Corals)"
+            ? "Severe Bleaching (&ge;40% of Corals)"
             : "Unknown Bleaching Status";
       
         popup
@@ -448,7 +553,7 @@ const handleSubmit = () => {
       {showInstructions && (
         <div className="instructions-popup">
           <h3>Map Tips</h3>
-          <p>Use the toolbar to switch between <b>Reef Distributions</b>, <b>Last Known Reef Health</b>, and <b>Bleaching Predictions</b>. Adjust the year using the slider to view predictions for different years. Hover over points for detailed information. Scroll to zoom in or out, and be sure to drag the map around to explore. A legend is available in the bottom left corner of the map. <br></br><br></br><b>Reef Distributions</b> shows where reefs are around the globe.<br></br><b>Last Known Reef Health</b> shows the most current reef health, based on hard coral cover, for each location. If you click on a datapoint, you can simulate changing environmental and climate features using our model to see how the coral cover would be predicted to change. <br></br><b>Bleaching Predictions</b> are predictions of the percentage of corals bleached at various locations. You can read more about our prediction process on our main site.</p>
+          <p>Use the toolbar to switch between <b>Reef Distributions</b>, <b>Last Known Reef Health</b>, and <b>Coral Bleaching Predictions</b>. Adjust the year using the slider to view predictions for different years. Hover over points for detailed information. Scroll to zoom in or out, and be sure to drag the map around to explore. A legend is available in the bottom left corner of the map. <br></br><br></br><b>Reef Distributions</b> shows where reefs are around the globe.<br></br><b>Last Known Reef Health</b> shows the most current reef health, based on hard coral cover, for each location. If you click on a datapoint, you can simulate changing environmental and climate features using our model to see how the coral cover would be predicted to change. <br></br><b>Coral Bleaching Predictions</b> are predictions of the percentage of corals bleached at various locations. If you click on a datapoint in that layer you can edit features to see how predictions may change. You can read more about our prediction process on our main site.</p>
           <button onClick={() => setShowInstructions(false)} className="close-button">Close</button>
         </div>
       )}
@@ -578,7 +683,7 @@ const handleSubmit = () => {
                     borderRadius: "3px",
                   }}
                 ></div>
-                <span>Severe Bleaching (&gt;40% of Corals)</span>
+                <span>Severe Bleaching (&ge;40% of Corals)</span>
               </div>
             </>
         )}
@@ -769,6 +874,185 @@ const handleSubmit = () => {
     {prediction === "poor" && "Unhealthy"}
     {prediction === "fair" && "Fair"}
   </div>
+)}
+</div>
+
+<div ref={mapContainerRef} style={{ width: "100%", height: "100%" }}></div>
+</div>
+)}
+
+{modalVisibleBleaching && (
+  <div className="modal">
+    {/* Close Button (X) */}
+    <button
+      onClick={handleModalCloseBleaching}
+      style={{
+        position: "absolute",
+        top: "0px",
+        right: "10px",
+        backgroundColor: "transparent",
+        border: "none",
+        fontSize: "18px",
+        fontWeight: "bold",
+        cursor: "pointer",
+        color: "#715eb7",
+      }}
+    >
+      &times;
+    </button>
+    <div style={{ marginBottom: "15px" }}>
+      <p><strong>Coordinates:</strong> {coordinates.lat.toFixed(2)}, {coordinates.lng.toFixed(2)}</p>
+      <p><strong>Country/Region:</strong> {countryName}</p>
+      <p><strong>Ecoregion:</strong> {ecoregion}</p>
+    </div>
+    <h3></h3>
+    {Object.keys(featureValuesBleaching).map((feature) => {
+      let min = 0; // default min value
+      let max = 100; // default max value
+      let text = "";
+      let tooltiptext = ""
+
+      switch (feature) {
+        case "depth_m":
+          text = "Depth (m)";
+          tooltiptext = "Depth of site in meters";
+          break;
+        case "distance_to_shore":
+          text = "Distance to Shore (m)";
+          tooltiptext = "Distance of site to shore in meters";
+          break;
+        case "climsst":
+          min = 270;
+          max = 307.04;
+          text = "Climatological Sea Surface Temperature (SST) (K)";
+          tooltiptext = "Climatological Sea Surface Temperature (SST) based on weekly SSTs for the study time frame, created using a harmonics approach, given in Kelvin";
+          break;
+        case "temperature_mean":
+          min = 291;
+          max = 307;
+          text = "Mean Sea Surface Temperature (SST) (K)";
+          tooltiptext = "Mean Sea Surface Temperature (SST) in Kelvin";
+          break;
+        case "windspeed":
+          min = 0.0;
+          max = 14.0;
+          text = "Windspeed (m/hr)";
+          tooltiptext = "Windspeed, which can affect waves and temperature, in meters per hour";
+          break;
+        case "ssta_minimum":
+          min = -7.33;
+          max = 2;
+          text = "Sea Surface Temperature Anomaly (SSTA) Minimum (°C/K)";
+          tooltiptext = "Sea Surface Temperature Anomaly: weekly SST minus weekly climatological SST in degrees Celsius or Kelvin. Minimum SSTA is the minimum SSTA over the study period.";
+          break;
+        case "ssta_maximum":
+          min = 0.0;
+          max = 16;
+          text = "Sea Surface Temperature Anomaly (SSTA) Maximum (°C/K)";
+          tooltiptext = "Sea Surface Temperature Anomaly: weekly SST minus weekly climatological SST in degrees Celsius or Kelvin. Maximum SSTA is the maximum SSTA over the study period.";
+          break;
+        case "ssta_frequency":
+          min = 0.0;
+          max = 52;
+          text = "Sea Surface Temperature Anomaly (SSTA) Frequency";
+          tooltiptext = "Sea Surface Temperature Anomaly Frequency: number of times over the previous 52 weeks that SSTA >=1 degree C/K"
+          break;
+        default:
+          break;
+      }
+
+      return (
+        <div key={feature} style={{ marginBottom: "15px"}}>
+          <label class="label-with-tooltip" data-tooltip={tooltiptext}>{text}:</label>
+          {["depth_m", "distance_to_shore"].includes(feature) ? (
+            <span style={{ marginLeft: "10px" }}>{featureValuesBleaching[feature]}</span>
+          ) : (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <input
+                type="range"
+                id={feature}
+                name={feature}
+                className="year-slider"
+                min={min}
+                max={max}
+                step={0.01}
+                value={featureValuesBleaching[feature]}
+                onChange={(e) => handleFeatureChangeBleaching(feature, parseFloat(e.target.value))}
+              />
+              <span style={{ marginLeft: "10px" }}>{featureValuesBleaching[feature].toFixed(2)}</span>
+            </div>
+          )}
+        </div>
+      );
+    })}
+
+<div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "20px" }}>
+  {/* Get Prediction Button */}
+  <button
+    className="toggleButton"
+    onClick={() => {
+      setPredictionBleaching(null); // clear previous prediction
+      setLoadingBleaching(true); // loading animation
+      handleSubmitBleaching(); // prediction API call
+    }}
+  >
+    Get Prediction
+  </button>
+
+  {/* Loading Animation */}
+  {loadingBleaching && (
+    <div style={{ marginTop: "20px", fontSize: "16px", fontWeight: "bold", color: "#715eb7" }}>
+      Loading...
+      <div
+        style={{
+          marginTop: "10px",
+          width: "50px",
+          height: "50px",
+          border: "5px solid #f3f3f3",
+          borderTop: "5px solid #715eb7",
+          borderRadius: "50%",
+          animation: "spin 1s linear infinite",
+        }}
+      ></div>
+    </div>
+  )}
+
+  {/* Prediction Display */}
+{!loadingBleaching && predictionBleaching && (
+  <div
+    style={{
+      marginTop: "20px",
+      width: "250px",
+      padding: "15px",
+      borderRadius: "20px",
+      backgroundColor:
+        colorblindMode
+          ? predictionBleaching === "bleaching"
+            ? "#FFD700"
+            : predictionBleaching === "fair"
+            ? "#00D900"
+            : predictionBleaching === "low_bleaching"
+            ? "#FF00AA"
+            : "#cccccc"
+          : predictionBleaching === "bleaching"
+          ? "#ff0000"
+          : predictionBleaching === "fair"
+          ? "#ffa500"
+          : predictionBleaching === "low_bleaching"
+          ? "#00ff00"
+          : "#cccccc",
+      color: "#fff",
+      textAlign: "center",
+      fontSize: "18px",
+      fontWeight: "bold",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+  >
+    {predictionBleaching === "low_bleaching" && "Low or Moderate Bleaching (<40%)"}
+    {predictionBleaching === "bleaching" && "Severe Bleaching (≥40%)"}
+    </div>
 )}
 
 </div>

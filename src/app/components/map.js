@@ -232,6 +232,14 @@ const handleSubmit = () => {
         visibility: "none", // hidden by default
       });
 
+      map.on('mouseenter', 'latest-datapoints-layer', () => {
+        map.getCanvas().style.cursor = 'pointer'; // Change cursor to pointing finger
+      });
+      
+      map.on('mouseleave', 'latest-datapoints-layer', () => {
+        map.getCanvas().style.cursor = ''; // Reset cursor to default
+      });
+
       map.on("mousemove", "latest-datapoints-layer", (e) => {
         const { country_name, ecoregion, hard_coral_class, date_year } = e.features[0].properties;
         popup
@@ -347,6 +355,15 @@ const handleSubmit = () => {
         setEcoregion(ecoregion);
         setModalVisibleBleaching(true);
       });
+
+      map.on('mouseenter', 'predictions-layer', () => {
+        map.getCanvas().style.cursor = 'pointer'; // Change cursor to pointing finger
+      });
+      
+      map.on('mouseleave', 'predictions-layer', () => {
+        map.getCanvas().style.cursor = ''; // Reset cursor to default
+      });
+      
 
       map.on("mousemove", "predictions-layer", (e) => {
         const { country_name, ecoregion, date_year, bleaching_status } = e.features[0].properties;

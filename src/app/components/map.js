@@ -631,7 +631,7 @@ const handleSubmit = () => {
                   borderRadius: "3px",
                 }}
               ></div>
-              <span>Good Coral Cover (&ge;40%)</span>
+              <span>Good Hard Coral Cover (&ge;40%)</span>
             </div>
             <div className="legend-item" style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
               <div
@@ -644,7 +644,7 @@ const handleSubmit = () => {
                   borderRadius: "3px",
                 }}
               ></div>
-              <span>Fair Coral Cover (20-40%)</span>
+              <span>Fair Hard Coral Cover (20-40%)</span>
             </div>
             <div className="legend-item" style={{ display: "flex", alignItems: "center" }}>
               <div
@@ -657,7 +657,7 @@ const handleSubmit = () => {
                   borderRadius: "3px",
                 }}
               ></div>
-              <span>Poor Coral Cover (&lt;20%)</span>
+              <span>Poor Hard Coral Cover (&lt;20%)</span>
             </div>
             </>
           )}

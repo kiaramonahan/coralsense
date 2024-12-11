@@ -631,7 +631,7 @@ const handleSubmit = () => {
                   borderRadius: "3px",
                 }}
               ></div>
-              <span>Good Coral Cover</span>
+              <span>Good Coral Cover (&ge;40%)</span>
             </div>
             <div className="legend-item" style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
               <div
@@ -644,7 +644,7 @@ const handleSubmit = () => {
                   borderRadius: "3px",
                 }}
               ></div>
-              <span>Fair Coral Cover</span>
+              <span>Fair Coral Cover (20-40%)</span>
             </div>
             <div className="legend-item" style={{ display: "flex", alignItems: "center" }}>
               <div
@@ -657,7 +657,7 @@ const handleSubmit = () => {
                   borderRadius: "3px",
                 }}
               ></div>
-              <span>Poor Coral Cover</span>
+              <span>Poor Coral Cover (&lt;20%)</span>
             </div>
             </>
           )}
@@ -887,8 +887,8 @@ const handleSubmit = () => {
       justifyContent: "center",
     }}
   >
-    {prediction === "good" && "Healthy"}
-    {prediction === "poor" && "Unhealthy"}
+    {prediction === "good" && "Healthy (≥20% Hard Coral Cover)"}
+    {prediction === "poor" && "Unhealthy (<20% Hard Coral Cover)"}
     {prediction === "fair" && "Fair"}
   </div>
 )}

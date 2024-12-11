@@ -370,9 +370,9 @@ const handleSubmit = () => {
       
         const bleachingMessage =
           bleaching_status === "low_bleaching"
-            ? "Low/Moderate Bleaching (&lt;40% of Corals)" 
+            ? "Low Bleaching (&lt;20% of Corals)" 
             : bleaching_status === "bleaching"
-            ? "Severe Bleaching (&ge;40% of Corals)"
+            ? "Moderate/Severe Bleaching (&ge;20% of Corals)"
             : "Unknown Bleaching Status";
       
         popup
@@ -687,7 +687,7 @@ const handleSubmit = () => {
                     borderRadius: "3px",
                   }}
                 ></div>
-                <span>Low/Moderate Bleaching (&lt;40% of Corals)</span>
+                <span>Low Bleaching (&lt;20% of Corals)</span>
               </div>
               <div className="legend-item" style={{ display: "flex", alignItems: "center" }}>
                 <div
@@ -700,7 +700,7 @@ const handleSubmit = () => {
                     borderRadius: "3px",
                   }}
                 ></div>
-                <span>Severe Bleaching (&ge;40% of Corals)</span>
+                <span>Moderate/Severe Bleaching (&ge;20% of Corals)</span>
               </div>
             </>
         )}
@@ -1067,8 +1067,8 @@ const handleSubmit = () => {
       justifyContent: "center",
     }}
   >
-    {predictionBleaching === "low_bleaching" && "Low or Moderate Bleaching (<40%)"}
-    {predictionBleaching === "bleaching" && "Severe Bleaching (≥40%)"}
+    {predictionBleaching === "low_bleaching" && "Low Bleaching (<20%)"}
+    {predictionBleaching === "bleaching" && "Moderate/Severe Bleaching (≥20%)"}
     </div>
 )}
 

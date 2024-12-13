@@ -129,7 +129,7 @@ These future projections were visualized on an interactive global map, providing
           </p>
           <h1 className="text-4xl font-bold mb-6"><br></br>Key Learnings & Impact</h1>
           <p>
-            Key takeaways include:
+            <strong>Key takeaways include:</strong>
             </p>
             <ul className="list-disc list-inside pl-4">
            <li>
@@ -150,15 +150,18 @@ These future projections were visualized on an interactive global map, providing
             </p>
             <ul className="list-disc list-inside pl-4">
            <li>
-           University of California Berkeley School of Information: For supporting our project.
+           <strong>University of California Berkeley School of Information:</strong> For supporting our project.
            </li>
            <li>
-           Data Providers: NOAA, Coral Reef Alliance, Allen Coral Atlas, and other organizations for making critical datasets publicly available.
+           <strong>Kira Wetzel and Puya Vahabi</strong> For support and guidance as mentors and instructors.
            </li>
            <li>
-           Our Mentors and Peers: For their guidance and encouragement throughout the project.
+           <strong>Data Providers:</strong> NOAA, Coral Reef Alliance, Allen Coral Atlas, and other organizations for making critical datasets publicly available.
            </li>
-           <li>Dr. Helen Fox from the Coral Reef Alliance for guidance and expertise</li>
+           <li>
+           <strong>Our Mentors and Peers:</strong> For their guidance and encouragement throughout the project.
+           </li>
+           <li><strong>Dr. Helen Fox</strong> from the Coral Reef Alliance for guidance and expertise</li>
           <li>Megan Howson from the Department of Oceanography at Texas A&M University for her subject matter expertise and invaluable insights.</li>
           </ul>
           <h1 className="text-4xl font-bold mb-6"><br></br>References</h1>

@@ -162,7 +162,7 @@ These future projections were visualized on an interactive global map, providing
            <strong>Our Mentors and Peers:</strong> For their guidance and encouragement throughout the project.
            </li>
            <li><strong>Dr. Helen Fox</strong> from the Coral Reef Alliance for guidance and expertise</li>
-          <li>Megan Howson from the Department of Oceanography at Texas A&M University for her subject matter expertise and invaluable insights.</li>
+          <li><strong>Megan Howson</strong> from the Department of Oceanography at Texas A&M University for her subject matter expertise and invaluable insights.</li>
           </ul>
           <h1 className="text-4xl font-bold mb-6"><br></br>References</h1>
 <div className="text-sm leading-5 space-y-2">

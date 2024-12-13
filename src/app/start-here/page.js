@@ -122,7 +122,45 @@ export default function StartHere() {
               <strong>Evaluation Metrics:</strong> Metrics like RMSE and accuracy demonstrated reliability.
            </li>
           </ul>
-
+          <p>
+          Based on the evaluation of several classification models, Random Forest demonstrated the best performance, achieving the highest weighted F1-score of 0.84 and accuracy of 0.84. Consequently, Random Forest was selected for time series forecasting, where forecasted feature values, such as sea surface temperature and wind speed, were used to predict coral reef health for the years 2030, 2035, and 2040. 
+<br></br>
+These future projections were visualized on an interactive global map, providing users with a dynamic tool for scenario analysis which allows for the exploration of various conservation strategies.
+          </p>
+          <h1 className="text-4xl font-bold mb-6"><br></br>Key Learnings & Impact</h1>
+          <p>
+            Key takeaways include:
+            </p>
+            <ul className="list-disc list-inside pl-4">
+           <li>
+           A proactive, data-driven approach is essential to mitigate coral reef losses.
+           </li>
+           <li>
+           Integrating diverse datasets (environmental, socio-economic, and geospatial) significantly improves prediction accuracy.
+           </li>
+           <li>
+           The interactive map provides an accessible platform for visualizing data, empowering stakeholders to make informed decisions.
+           </li>
+           </ul>
+           <h2 className="text-2xl font-semibold mt-4">Impact</h2>
+           <p>CoralSense equips conservationists and policymakers with the tools to protect vital marine ecosystems and foster sustainable practices.</p>
+           <h1 className="text-4xl font-bold mb-6"><br></br>Acknowledgements</h1>
+           <p>
+            We express our gratitude to:
+            </p>
+            <ul className="list-disc list-inside pl-4">
+           <li>
+           University of California Berkeley School of Information: For supporting our project.
+           </li>
+           <li>
+           Data Providers: NOAA, Coral Reef Alliance, Allen Coral Atlas, and other organizations for making critical datasets publicly available.
+           </li>
+           <li>
+           Our Mentors and Peers: For their guidance and encouragement throughout the project.
+           </li>
+           <li>Dr. Helen Fox from the Coral Reef Alliance for guidance and expertise</li>
+          <li>Megan Howson from the Department of Oceanography at Texas A&M University for her subject matter expertise and invaluable insights.</li>
+           </ul>
           </div>
         </div>
       </div>

@@ -67,6 +67,13 @@ export default function Datasets() {
             <p>
             The United Nations created gathered information from many sources to create one of the most detailed datasets on warm-water coral reefs available. We use this dataset to map locations of tropical and subtropical reefs on our map tool. 
             </p>
+            <h2 className="text-2xl font-semibold mt-4">Coupled Model Intercomparison Project (CMIP5) Climate Projections Dataset</h2>
+            <p>
+              Source: <a href="https://cds.climate.copernicus.eu/datasets/sis-biodiversity-cmip5-global?tab=overview" target="_blank" className="underline text-blue-300">Copernicus Climate Data Store</a>
+            </p>
+            <p>
+            Offers future climate scenario data, aiding in forecasting the long-term effects of global warming on coral reef ecosystems.
+            </p>
           </div>
         </div>
       </div>
